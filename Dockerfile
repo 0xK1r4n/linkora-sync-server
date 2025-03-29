@@ -15,6 +15,12 @@ WORKDIR /home/gradle/src
 RUN gradle buildFatJar --no-daemon
 
 FROM amazoncorretto:23-alpine AS runtime
+RUN apk add --no-cache sqlite
+RUN mkdir -p /data
+ENV LINKORA_SERVER_USE_ENV_VAL=true \
+    LINKORA_DATABASE_URL=sqlite:///data/linkora_db \
+    LINKORA_HOST_ADDRESS=0.0.0.0 \
+    LINKORA_SERVER_PORT=8080
 EXPOSE 8080
 RUN mkdir /app
 COPY --from=build /home/gradle/src/build/libs/*.jar /app/linkoraSyncServer.jar
