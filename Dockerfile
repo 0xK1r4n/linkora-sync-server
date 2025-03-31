@@ -15,8 +15,8 @@ WORKDIR /home/gradle/src
 RUN gradle buildFatJar --no-daemon
 
 FROM amazoncorretto:23-alpine AS runtime
-RUN apk add --no-cache sqlite
-RUN mkdir -p /data
+RUN apk add --no-cache sqlite && \
+    mkdir -p /data
 ENV LINKORA_SERVER_USE_ENV_VAL=true \
     LINKORA_DATABASE_URL=sqlite:///data/linkora_db \
     LINKORA_HOST_ADDRESS=0.0.0.0 \
